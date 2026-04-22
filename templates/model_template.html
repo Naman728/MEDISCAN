@@ -1,0 +1,196 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediScan AI - Model Workspace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.tokens.css') }}" />
+</head>
+<body>
+  <main class="model-shell">
+    <div class="ambient-layer" aria-hidden="true">
+      <canvas class="particle-canvas" id="particleCanvas"></canvas>
+      <div class="ambient-dots"></div>
+      <div class="ambient-grid"></div>
+      <div class="ambient-orb orb-1"></div>
+      <div class="ambient-orb orb-2"></div>
+      <div class="ambient-orb orb-3"></div>
+      <svg class="ambient-curves" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <path class="curve-path curve-a" d="M-20,420 C200,480 300,140 520,180 C740,220 900,510 1140,430 C1340,360 1460,270 1620,190"/>
+        <path class="curve-path curve-b" d="M-20,500 C190,540 340,290 520,320 C700,350 890,620 1140,560 C1320,518 1460,420 1620,380"/>
+        <path class="curve-path curve-c" d="M-20,620 C220,580 360,730 520,690 C780,625 980,350 1180,340 C1360,332 1490,470 1620,520"/>
+        <path class="curve-path curve-d" d="M-20,320 C150,340 300,610 560,600 C760,594 930,370 1140,290 C1360,208 1490,270 1620,320"/>
+      </svg>
+    </div>
+
+    <section class="dashboard-root" id="dashboardRoot">
+      <aside class="left-rail">
+        <article class="panel-card">
+          <div class="brand-block">
+            <div class="brand-badge" id="brandIcon">MS</div>
+            <div>
+              <a class="brand-title" href="{{ url_for('home') }}" style="text-decoration:none; color:inherit;">MediScan AI</a>
+              <div class="brand-sub" id="serviceLabel">Model Workspace</div>
+            </div>
+          </div>
+          <div class="status-pill" id="globalStatus">
+            <span class="status-dot"></span>
+            <span id="statusText">Status: Ready</span>
+          </div>
+        </article>
+
+        <article class="panel-card">
+          <h3 class="panel-title">Upload Scan</h3>
+          <p class="panel-sub">Drag and drop or browse scan files (TIFF, PNG, JPG, DICOM export).</p>
+          <label class="upload-dropzone" id="uploadDropzone" for="scanUploadInput">
+            <div style="font-size: 1.8rem">&#8593;</div>
+            <div class="upload-title">Drop scan here</div>
+            <div class="upload-sub" id="uploadFileName">No file selected</div>
+            <div class="upload-hint">Click to choose file</div>
+          </label>
+          <input class="upload-input" id="scanUploadInput" type="file" accept=".png,.jpg,.jpeg,.webp,.bmp" />
+          <button class="action-btn" id="runAnalysisBtn" disabled>
+            <span id="runBtnText">Run Analysis</span>
+          </button>
+        </article>
+
+        <article class="panel-card">
+          <h3 class="panel-title">Workflow Controls</h3>
+          <p class="panel-sub">Persistent processing options for all modalities.</p>
+          <label style="display:flex; gap:10px; margin-top:14px; font-size:0.84rem; color:var(--text-soft); align-items:center;">
+            <input type="checkbox" id="compareToggle" checked />
+            Enable comparison overlays
+          </label>
+          <label style="display:flex; gap:10px; margin-top:10px; font-size:0.84rem; color:var(--text-soft); align-items:center;">
+            <input type="checkbox" id="refToggle" checked />
+            Show feature references
+          </label>
+        </article>
+      </aside>
+
+      <section class="center-zone">
+        <article class="panel-card page-head">
+          <div>
+            <h1 class="page-title" id="pageTitle">AI-Powered Model Analysis</h1>
+            <p class="page-subtitle" id="pageSubtitle">Unified diagnostics and explainability workspace.</p>
+          </div>
+          <div class="page-chip" id="todayStamp"></div>
+        </article>
+
+        <section class="summary-header" id="summaryHeader"></section>
+
+        <article class="panel-card" id="comparisonPanel">
+          <div class="panel-head">
+            <div>
+              <h3 class="panel-title">Comparison View</h3>
+              <p class="panel-sub">View source scan and active AI heatmap side-by-side or focused.</p>
+            </div>
+            <div class="toggle-group" id="comparisonToggleGroup" role="tablist" aria-label="Comparison mode">
+              <button class="toggle-btn active" data-mode="side" role="tab" aria-selected="true">Side-by-Side</button>
+              <button class="toggle-btn" data-mode="single" role="tab" aria-selected="false">Single Focus</button>
+            </div>
+          </div>
+          <div class="comparison-body" id="comparisonBody">
+            <figure class="compare-pane primary">
+              <figcaption class="compare-label">Original Scan</figcaption>
+              <img id="sourcePreview" alt="Original uploaded scan" />
+              <div class="compare-placeholder" id="sourcePlaceholder">Upload a scan to preview</div>
+            </figure>
+            <figure class="compare-pane secondary">
+              <figcaption class="compare-label">AI Heatmap</figcaption>
+              <img id="heatmapPreview" alt="Selected AI heatmap" />
+              <div class="compare-placeholder" id="heatPlaceholder">Run analysis to generate heatmaps</div>
+            </figure>
+          </div>
+        </article>
+
+        <section class="workspace-grid">
+          <article class="panel-card">
+            <div class="panel-head">
+              <div>
+                <h3 class="panel-title">Abnormality Predictions</h3>
+                <p class="panel-sub">Scrollable confidence list for variable abnormality outputs.</p>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <button class="copy-btn surf-interactive" id="copyAllAbnormalitiesBtn" type="button" aria-label="Copy all abnormality predictions" disabled>Copy</button>
+                <div id="predictionCounter" class="page-chip">0 / 0 elevated</div>
+              </div>
+            </div>
+            <div class="abnormality-list" id="abnormalityList"></div>
+          </article>
+
+          <article class="panel-card">
+            <div class="panel-head">
+              <div>
+                <h3 class="panel-title">Heatmap Gallery</h3>
+                <p class="panel-sub">Select any generated heatmap count to focus in comparison view.</p>
+              </div>
+            </div>
+            <div class="heatmap-grid" id="heatmapGrid"></div>
+          </article>
+        </section>
+      </section>
+
+      <aside class="right-rail">
+        <article class="panel-card">
+          <h3 class="panel-title">Model Info</h3>
+          <p class="panel-sub">Architecture and deployment details for current modality.</p>
+          <ul class="model-info-list" id="modelInfoList"></ul>
+        </article>
+
+        <article class="panel-card">
+          <h3 class="panel-title">Processing Feed</h3>
+          <p class="panel-sub">VGG-16 staged output generation status.</p>
+          <div id="processingFeed" style="display:grid; gap:10px; margin-top:14px;"></div>
+        </article>
+      </aside>
+    </section>
+  </main>
+
+  <div class="zoom-modal" id="heatmapModal" aria-hidden="true">
+    <div class="zoom-modal-backdrop" data-close-modal="true"></div>
+    <article class="zoom-modal-card">
+      <header class="zoom-modal-head">
+        <h3 id="modalTitle">Heatmap Detail</h3>
+        <div class="zoom-modal-actions">
+          <button class="action-btn modal-mini-btn" id="zoomOutBtn" type="button">-</button>
+          <button class="action-btn modal-mini-btn" id="zoomInBtn" type="button">+</button>
+          <button class="action-btn modal-mini-btn" id="compareToggleBtn" type="button">Compare</button>
+          <a class="action-btn modal-download-btn" id="modalDownloadBtn" download="heatmap.png">Download</a>
+          <button class="action-btn modal-close-btn" id="closeModalBtn" type="button">Close</button>
+        </div>
+      </header>
+      <div class="zoom-modal-stage-shell" id="zoomStageShell">
+        <button class="zoom-side-nav" id="prevHeatmapBtn" type="button" aria-label="Previous heatmap">&larr;</button>
+        <div class="zoom-modal-stage" id="zoomStage">
+          <div class="zoom-compare-grid" id="zoomCompareGrid">
+            <section class="zoom-pane zoom-pane-primary">
+              <div class="zoom-pane-label">Current Heatmap</div>
+              <img id="modalHeatmapImage" alt="Zoomed heatmap preview" />
+            </section>
+            <section class="zoom-pane zoom-pane-secondary" id="comparePane">
+              <div class="zoom-compare-head">
+                <label for="compareHeatmapSelect">Compare With</label>
+                <select id="compareHeatmapSelect" aria-label="Select second heatmap"></select>
+              </div>
+              <img id="compareHeatmapImage" alt="Compare heatmap preview" />
+              <div class="compare-empty" id="comparePlaceholder">Select another heatmap to compare side-by-side.</div>
+            </section>
+          </div>
+        </div>
+        <button class="zoom-side-nav" id="nextHeatmapBtn" type="button" aria-label="Next heatmap">&rarr;</button>
+      </div>
+    </article>
+  </div>
+
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+
+  <script src="{{ url_for('static', filename='js/model-page.config.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/model-page.js') }}"></script>
+</body>
+</html>
+

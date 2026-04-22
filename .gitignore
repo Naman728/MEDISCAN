@@ -1,0 +1,11 @@
+# Ignore model files
+*.pth
+*.h5
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+
+# Ignore extracted model artifacts and other generated files
+models/brain/_fresh_extract/
+desktop.ini

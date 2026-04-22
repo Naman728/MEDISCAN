@@ -1,0 +1,106 @@
+:root {
+  --bg: #0c1321;
+  --panel: #111b2d;
+  --text: #f4f7ff;
+  --muted: #9ea9c2;
+  --accent: #2ad3b2;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: radial-gradient(circle at top, #1b2d4f, var(--bg));
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.site-header {
+  text-align: center;
+  padding: 48px 16px 16px;
+}
+
+.site-header h1 { margin: 0; font-size: 2.3rem; }
+.site-header p { color: var(--muted); margin-top: 8px; }
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  max-width: 980px;
+  margin: 24px auto;
+  padding: 0 16px 24px;
+}
+
+.card {
+  background: color-mix(in srgb, var(--panel) 86%, #fff 14%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 20px;
+  color: var(--text);
+  text-decoration: none;
+  transition: transform 120ms ease, border-color 120ms ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+}
+
+.top-nav {
+  display: flex;
+  gap: 14px;
+  padding: 18px 16px;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.top-nav a {
+  color: var(--text);
+  text-decoration: none;
+  opacity: 0.9;
+}
+
+.top-nav a:hover { color: var(--accent); }
+
+.page-wrap {
+  max-width: 980px;
+  margin: 8px auto 40px;
+  padding: 0 16px;
+}
+
+.predict-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.predict-form input[type="file"] {
+  background: #1f2a40;
+  color: var(--text);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.predict-form button {
+  background: var(--accent);
+  color: #001b17;
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.result-box {
+  margin-top: 16px;
+  min-height: 130px;
+  background: #0f192a;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  padding: 12px;
+  white-space: pre-wrap;
+}

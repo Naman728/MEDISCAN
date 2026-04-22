@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blood Sample - MediScan AI</title>
+  <style>
+    body { font-family: "DM Sans", Arial, sans-serif; margin: 0; background: #f7f9fe; color: #0d1117; }
+    .wrap { max-width: 860px; margin: 80px auto; padding: 0 20px; }
+    .card { background: #fff; border: 1px solid #e4e8f0; border-radius: 16px; padding: 28px; }
+    .badge { display:inline-block; padding:6px 10px; border-radius:999px; background:#fef3c7; color:#92400e; font-weight:700; font-size:12px; }
+    h1 { margin: 12px 0 8px; font-size: 30px; }
+    p { color: #5a6478; line-height: 1.7; }
+    a { color: #4f46e5; text-decoration: none; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <span class="badge">Module Status</span>
+      <h1>Blood Sample Analysis</h1>
+      <p>This model page is registered and searchable. Backend integration for blood sample inference can be plugged in next.</p>
+      <p><a href="{{ url_for('home') }}">Back to Home</a></p>
+    </div>
+  </div>
+</body>
+</html>
